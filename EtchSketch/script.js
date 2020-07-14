@@ -2,6 +2,9 @@ const containDiv = document.querySelector(".container");
 
 //creates grid then attaches everything
 function createGrid(x){
+    containDiv.style.gridTemplateColumns = `repeat(${x}, 50px`;
+    containDiv.style.gridTemplateRows = `repeat(${x-1}, 50px`;
+
     for(let i = 0; i < x; i++){
         for(let j = 0; j < x; j++){
             let square = document.createElement("div");
@@ -33,3 +36,14 @@ function clearGrid(){
 
 createGrid(16);
 
+/*let years = [2000, 1900, 1940, 2020];
+let yearsSorted = years.sort(function(a, b){
+    if(a < b){
+        return 1;
+    }
+    else{
+        return -1;
+    }
+});
+
+console.table(yearsSorted);*/
