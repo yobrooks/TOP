@@ -1,0 +1,28 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "style.css">
+    <title>Document</title>
+</head>
+<body>
+    <button id = "add-button">ADD NEW BOOK</button>
+    
+    <form class = "add-book-form">
+        <label for = "title">Book Title:</label>
+        <input type = "text" name = "title" id = "title" required>
+        <label for = "author">Book Author:</label>
+        <input type = "text" name = "author" id = "author" required>
+        <label for = "pages">Number Pages:</label>
+        <input type = "text" name = "pages" id = "pages" required>
+        <label for = "read">Read</label>
+        <input type = "radio" id = "read">
+        <label for = "notread" for = "notread">Not Read</label>
+        <input type = "radio" id = "notread">
+        <input type = "submit">
+    </form>
+    
+    <div class = "library"></div>
+    <script src = "script.js"></script>
+</body>
+</html>
