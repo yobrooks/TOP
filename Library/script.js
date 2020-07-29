@@ -22,9 +22,11 @@ Book.prototype.info = function(){
     return this.title + " by " + this.author + ", " + this.numPages + " pages, " + readMessage;
 }
 
+// Adds a book to the library and then displays it
 function addBookToLib(title, author, numPages, haveRead){
     let newBook = new Book(title, author, numPages, haveRead);
     myLib.push(newBook);
+    displayBook(newBook);
 }
 
 //change the read status of a book
@@ -32,40 +34,57 @@ function changeReadStatus(){
 
 }
 
-//display each book on the HTML page
-//needs a button for each one to remove it
-function displayBooks(){
+//display the new book on the HTML page
+//also could've just gotten the last element of the library array
+//instead of passing the whole book object
+function displayBook(book){
+    //get the div where books will be displayed
     let displayDiv = document.querySelector('.library');
-    myLib.forEach(book => {
-        //OWN FUNCTION
-       let bookEntry = document.createElement('div');
-       bookEntry.innerHTML = book.info();
-       displayDiv.appendChild(bookEntry);
 
-       //OWN FUNCTION
-       let removeButton = document.createElement('button');
-       removeButton.innerHTML = "Remove";
-       displayDiv.appendChild(removeButton);
+    //add new book entry
+    let bookEntry = document.createElement('div');
+    bookEntry.innerHTML = book.info();
+    displayDiv.appendChild(bookEntry);
 
-       let readButton = document.createElement('button');
-       readButton.innerHTML = "Change Read Status";
-       displayDiv.appendChild(readButton);
-    });
+    //add remove button
+    let removeButton = document.createElement('button');
+    removeButton.innerHTML = "Remove";
+    displayDiv.appendChild(removeButton);
 
-    //NEED TO ATTACH EVENT LISTENERS FOR EACH BUTTON
+    //add read status button
+    let readButton = document.createElement('button');
+    readButton.innerHTML = "Change Read Status";
+    displayDiv.appendChild(readButton);
+
+
+    //attach event listeners for each button
 }
+
+//gets the book data and passes it to add a new book to the library
+function getNewBookData(elements){
+    let title = elements[0].value;
+    let author = elements[1].value;
+    let numPages = Number(elements[2].value);
+    let haveRead = false;
+    if(elements[3].checked){
+        haveRead = true;
+    }
+    addBookToLib(title, author, numPages, haveRead);
+}
+
 
 // add event listener to open form to add new book
 document.getElementById('add-button').addEventListener('click', function(){
     let addForm = document.querySelector('.add-book-form');
     addForm.style.display = 'block';
-    console.log("CLICK");
 });
 
-addBookToLib("the Hobbit", "JRR Tolkien", 296, true);
-addBookToLib("The Fire Next Time", "James Baldwin", 100, false);
-addBookToLib("Making Michael", "Mike Smallcombe", 600, true);
+//upon submitting the form, get the book data first, then reset the form and hide it
+document.querySelector(".add-book-form").onsubmit = function(e){
+    e.preventDefault();
+    //console.log(this.elements[0].type);
+    getNewBookData(this.elements);
+    this.reset();
+    this.style.display = 'none';
+}
 
-
-
-displayBooks();
