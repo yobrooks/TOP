@@ -3,11 +3,12 @@ let myLib = [];
 
 
 /* Book Object Constructor*/
-function Book(title, author, numPages, haveRead){
+function Book(title, author, numPages, haveRead, numID){
     this.title = title;
     this.author = author;
     this.numPages = numPages;
     this.haveRead = haveRead;
+    this.numID = numID;
 }
 
 /* Functions belonging to Book object
@@ -24,14 +25,34 @@ Book.prototype.info = function(){
 
 // Adds a book to the library and then displays it
 function addBookToLib(title, author, numPages, haveRead){
-    let newBook = new Book(title, author, numPages, haveRead);
+    let newBook = new Book(title, author, numPages, haveRead, myLib.length+1);
     myLib.push(newBook);
     displayBook(newBook);
 }
 
 //change the read status of a book
 function changeReadStatus(){
+    //find the book div, the book's id, and get the book from the library
+    let bookDiv = this.parentElement;
+    let bookDivIndex = Number(bookDiv.getAttribute('data-index'));
+    let chosenBook = myLib.find(book => book.numID === bookDivIndex);
 
+    //change the read status to the opposite of what it was
+    //update the html of the paragraph tag
+    chosenBook.haveRead = !chosenBook.haveRead;
+    bookDiv.firstChild.innerHTML = chosenBook.info();
+}
+
+//delete an entry in the library
+function deleteEntry(){
+    //get the book div and the book's id
+    let bookDiv = this.parentElement;
+    let bookDivIndex = Number(bookDiv.getAttribute('data-index'));
+    //remove the div with the book entry on the HTML
+    bookDiv.remove();
+    //find the index of the book that has the matching book id and remove it from the library
+    let chosenBookIndex = myLib.findIndex(book => book.numID === bookDivIndex);
+    myLib.splice(chosenBookIndex, 1);
 }
 
 //display the new book on the HTML page
@@ -41,23 +62,27 @@ function displayBook(book){
     //get the div where books will be displayed
     let displayDiv = document.querySelector('.library');
 
-    //add new book entry
+    //add new book entry div
     let bookEntry = document.createElement('div');
-    bookEntry.innerHTML = book.info();
+    bookEntry.setAttribute('data-index', book.numID.toString());
     displayDiv.appendChild(bookEntry);
+
+    //add paragraph with book info
+    let bookInfo = document.createElement('p');
+    bookInfo.innerHTML = book.info();
+    bookEntry.appendChild(bookInfo);
 
     //add remove button
     let removeButton = document.createElement('button');
     removeButton.innerHTML = "Remove";
-    displayDiv.appendChild(removeButton);
+    removeButton.addEventListener('click', deleteEntry);
+    bookEntry.appendChild(removeButton);
 
     //add read status button
     let readButton = document.createElement('button');
     readButton.innerHTML = "Change Read Status";
-    displayDiv.appendChild(readButton);
-
-
-    //attach event listeners for each button
+    readButton.addEventListener('click', changeReadStatus);
+    bookEntry.appendChild(readButton);    
 }
 
 //gets the book data and passes it to add a new book to the library
